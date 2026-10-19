@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEN202 - Security Incident Mapping</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#172033}
+header{background:#162447;color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px}
+header h1{margin:0;font-size:22px}
+header p{margin:5px 0 0;color:#cbd5e1;font-size:13px}
+.container{width:min(1100px,92%);margin:25px auto}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
+.card{background:white;border-radius:12px;padding:18px;box-shadow:0 2px 10px #0000000d}
+.stat strong{display:block;font-size:28px;margin-top:8px}
+.stat span{font-size:13px;color:#64748b}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
+h2{font-size:18px;margin-top:0}
+label{display:block;font-size:13px;font-weight:bold;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+button{border:0;border-radius:8px;padding:11px 16px;background:#2563eb;color:white;font-weight:bold;cursor:pointer;margin-top:14px}
+button:hover{opacity:.9}
+button.secondary{background:#64748b}
+.map{height:300px;background:#e8eef5;border-radius:10px;position:relative;overflow:hidden;border:1px solid #d5dde8}
+.road{position:absolute;background:#fff;border:1px solid #d4dce7}
+.r1{left:0;top:45%;width:100%;height:42px}.r2{top:0;left:44%;width:55px;height:100%}
+.building{position:absolute;background:#b8c7d9;border:2px solid #8799ad;border-radius:5px;padding:8px;font-size:11px;text-align:center}
+.b1{left:8%;top:12%;width:110px}.b2{right:8%;top:15%;width:120px}.b3{left:12%;bottom:10%;width:125px}.b4{right:10%;bottom:10%;width:105px}
+.marker{position:absolute;width:17px;height:17px;background:#dc2626;border:3px solid white;border-radius:50%;box-shadow:0 1px 5px #0006}
+.m1{left:28%;top:40%}.m2{left:67%;top:61%}
+.legend{font-size:12px;margin-top:9px;color:#64748b}
+.incident{border-left:5px solid #dc2626;margin:10px 0;padding:12px;background:#f8fafc;border-radius:7px}
+.incident h3{margin:0 0 5px;font-size:15px}.incident p{margin:4px 0;font-size:13px;color:#475569}
+.badge{display:inline-block;font-size:11px;padding:4px 7px;border-radius:10px;background:#fee2e2;color:#991b1b}
+.empty{color:#64748b;font-size:13px}
+footer{text-align:center;color:#64748b;font-size:12px;padding:25px}
+@media(max-width:750px){.grid,.stats{grid-template-columns:1fr}.map{height:250px}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Security Incident Mapping (SIM)</h1>
+    <p>SEN 202 • Campus Security Incident Reporting & Monitoring</p>
+  </div>
+  <span>Student Prototype</span>
+</header>
+
+<main class="container">
+  <section class="stats">
+    <div class="card stat"><span>Total Incidents</span><strong id="total">2</strong></div>
+    <div class="card stat"><span>High Priority</span><strong id="high">1</strong></div>
+    <div class="card stat"><span>Resolved</span><strong id="resolved">0</strong></div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Report a Security Incident</h2>
+      <form id="incidentForm">
+        <label for="type">Incident Type</label>
+        <select id="type" required>
+          <option value="">Select incident type</option>
+          <option>Unauthorized Access</option>
+          <option>Phishing / Social Engineering</option>
+          <option>Malware</option>
+          <option>Data Exposure</option>
+          <option>Suspicious Activity</option>
+          <option>Other</option>
+        </select>
+
+        <label for="location">Location</label>
+        <input id="location" placeholder="e.g. Computer Science Lab" required>
+
+        <label for="priority">Priority</label>
+        <select id="priority" required>
+          <option>Low</option><option>Medium</option><option>High</option>
+        </select>
+
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Briefly describe what happened..." required></textarea>
+
+        <button type="submit">Submit Incident</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Campus Incident Map</h2>
+      <div class="map">
+        <div class="road r1"></div><div class="road r2"></div>
+        <div class="building b1">ICT Centre</div>
+        <div class="building b2">Main Library</div>
+        <div class="building b3">Computer Science Lab</div>
+        <div class="building b4">Admin Block</div>
+        <div class="marker m1" title="Incident"></div>
+        <div class="marker m2" title="Incident"></div>
+      </div>
+      <div class="legend">Red markers represent reported incident locations. This is a prototype campus map.</div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:20px">
+    <h2>Recent Incidents</h2>
+    <div id="incidentList">
+      <div class="incident"><h3>Suspicious Activity <span class="badge">High</span></h3><p><b>Location:</b> Main Library</p><p>Unusual login activity was reported on a shared workstation.</p></div>
+      <div class="incident"><h3>Phishing / Social Engineering <span class="badge">Medium</span></h3><p><b>Location:</b> ICT Centre</p><p>A suspicious email containing a misleading login link was reported.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>SEN202 • Security Incident Mapping (SIM) • Academic Prototype</footer>
+
+<script>
+const form=document.getElementById("incidentForm");
+const list=document.getElementById("incidentList");
+const total=document.getElementById("total");
+const high=document.getElementById("high");
+
+form.addEventListener("submit",function(e){
+  e.preventDefault();
+  const type=document.getElementById("type").value;
+  const location=document.getElementById("location").value.trim();
+  const priority=document.getElementById("priority").value;
+  const description=document.getElementById("description").value.trim();
+
+  const item=document.createElement("div");
+  item.className="incident";
+  item.innerHTML=`<h3>${escapeHtml(type)} <span class="badge">${escapeHtml(priority)}</span></h3>
+  <p><b>Location:</b> ${escapeHtml(location)}</p>
+  <p>${escapeHtml(description)}</p>`;
+  list.prepend(item);
+
+  total.textContent=Number(total.textContent)+1;
+  if(priority==="High") high.textContent=Number(high.textContent)+1;
+  form.reset();
+  alert("Incident submitted successfully.");
+});
+
+function escapeHtml(value){
+  return value.replace(/[&<>"']/g,function(ch){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch];
+  });
+}
+</script>
+</body>
+</html>
